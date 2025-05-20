@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// 记账本的列表
+router.get('/account', function (req, res, next) {
+  res.send('账本列表')
+})
 
-module.exports = router;
+// 添加记录
+router.get('/account/create', function (req, res, next) {
+  res.send('添加记录')
+})
+
+module.exports = router
