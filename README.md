@@ -1,0 +1,1 @@
+start设置的为nodemon运行, nodemon全局安装的,并没有安装到依赖当中
