@@ -1,0 +1,47 @@
+# 忽略 Node.js 自动生成的文件夹
+node_modules/
+
+# 忽略构建工具产生的文件（如 Webpack、Vite 等）
+dist/
+build/
+out/
+
+# 忽略测试工具产生的文件
+coverage/
+
+# 忽略 ESLint 或 Prettier 的缓存文件
+.eslintcache
+.prettiercache
+
+# 忽略用户配置文件（如 VSCode 配置）
+.vscode/
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 忽略日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 忽略特定的临时文件
+*.swp
+*.tmp
+*.tmp.js
+*.snapshot
+
+# 忽略 Node.js 的默认忽略文件
+.DS_Store
+Thumbs.db
+
+# 忽略特定的临时文件夹
+temp/
+tmp/
+
+# 忽略构建工具的日志文件
+.next/
+.cache/
