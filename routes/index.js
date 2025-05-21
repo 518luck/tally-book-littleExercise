@@ -12,7 +12,9 @@ const shortid = require('shortid')
 
 // 记账本的列表
 router.get('/account', function (req, res, next) {
-  res.render('list')
+  // 获取所有的账单信息
+  let accounts = db.get('accounts').value()
+  res.render('list', { accounts })
 })
 
 // 添加记录
@@ -28,7 +30,7 @@ router.post('/account', (req, res) => {
   db.get('accounts')
     .unshift({ id, ...req.body })
     .write()
-  res.send('添加记录')
+  res.render('success', { msg: '新增成功', url: '/account' })
 })
 
 module.exports = router
