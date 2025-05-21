@@ -33,4 +33,12 @@ router.post('/account', (req, res) => {
   res.render('success', { msg: '新增成功', url: '/account' })
 })
 
+router.get('/account/:id', (req, res) => {
+  // 获取id
+  let id = req.params.id
+  // 删除
+  db.get('accounts').remove({ id }).write()
+  res.send('删除成功')
+})
+
 module.exports = router
