@@ -33,6 +33,7 @@ yarn-error.log*
 *.tmp
 *.tmp.js
 *.snapshot
+静态网页
 
 # 忽略 Node.js 的默认忽略文件
 .DS_Store
