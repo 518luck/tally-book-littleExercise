@@ -38,7 +38,7 @@ router.get('/account/:id', (req, res) => {
   let id = req.params.id
   // 删除
   db.get('accounts').remove({ id }).write()
-  res.send('删除成功')
+  res.render('success', { msg: '删除成功', url: '/account' })
 })
 
 module.exports = router
