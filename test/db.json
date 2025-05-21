@@ -1,0 +1,13 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "更新数据"
+    },
+    {
+      "id": 2,
+      "title": "lowdb is awesome"
+    }
+  ],
+  "user": {}
+}
