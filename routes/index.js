@@ -24,6 +24,8 @@ router.get('/account/create', function (req, res, next) {
 
 //新增记录
 router.post('/account', (req, res) => {
+  // 查看表单数据
+  console.log(req.body)
   // 生成id
   let id = shortid.generate()
   // 写入文件

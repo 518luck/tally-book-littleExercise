@@ -1,6 +1,14 @@
 {
   "accounts": [
     {
+      "id": "_YULdHhRZ",
+      "title": "买自行车",
+      "time": "2025-05-28",
+      "type": "-1",
+      "account": "359",
+      "remarks": "我生日"
+    },
+    {
       "id": "20g-RW7fc",
       "title": "测试数据",
       "time": "2025-05-21",
