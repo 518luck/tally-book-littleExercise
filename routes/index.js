@@ -13,11 +13,20 @@ const shortid = require('shortid')
 const moment = require('moment')
 const AccountModel = require('../models/AccountModebl')
 
+
+
 // 记账本的列表
-router.get('/account', function (req, res, next) {
-  // 获取所有的账单信息
-  let accounts = db.get('accounts').value()
-  res.render('list', { accounts })
+router.get('/account', async function (req, res, next) {
+  // 修正：去掉重复的函数名"async"
+  try {
+    // 使用 await 直接获取查询结果（无需再调用 exec().then()）
+    const accounts = await AccountModel.find().sort({ time: -1 })
+    // 直接渲染数据
+    res.render('list', { accounts, moment: moment })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Server error')
+  }
 })
 
 // 添加记录
