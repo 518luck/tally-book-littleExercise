@@ -1,17 +1,9 @@
 var express = require('express')
 var router = express.Router()
 
-// 导入lowdb
-const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
-const adapter = new FileSync(__dirname + '/../data/db.json')
-// 获取db对象
-const db = low(adapter)
-// 导入shortid
-const shortid = require('shortid')
 // 导入moment
 const moment = require('moment')
-const AccountModel = require('../models/AccountModebl')
+const AccountModel = require('../../models/AccountModebl')
 
 // 记账本的列表
 router.get('/account', async function (req, res, next) {
@@ -46,6 +38,7 @@ router.post('/account', async (req, res) => {
   res.render('success', { msg: '新增成功', url: '/account' })
 })
 
+// 删除记录
 router.get('/account/:id', (req, res) => {
   // 获取id
   let id = req.params.id
