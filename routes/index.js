@@ -9,6 +9,9 @@ const adapter = new FileSync(__dirname + '/../data/db.json')
 const db = low(adapter)
 // 导入shortid
 const shortid = require('shortid')
+// 导入moment
+const moment = require('moment')
+const AccountModel = require('../models/AccountModebl')
 
 // 记账本的列表
 router.get('/account', function (req, res, next) {
@@ -23,15 +26,16 @@ router.get('/account/create', function (req, res, next) {
 })
 
 //新增记录
-router.post('/account', (req, res) => {
-  // 查看表单数据
-  console.log(req.body)
-  // 生成id
-  let id = shortid.generate()
-  // 写入文件
-  db.get('accounts')
-    .unshift({ id, ...req.body })
-    .write()
+router.post('/account', async (req, res) => {
+  const data = await AccountModel.create({
+    ...req.body,
+    // 时间
+    time: moment(req.body.time).toDate(),
+  }).catch((err) => {
+    // 跳转到错误页面
+    res.render('error', { msg: err })
+    return
+  })
   res.render('success', { msg: '新增成功', url: '/account' })
 })
 
