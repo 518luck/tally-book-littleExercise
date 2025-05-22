@@ -13,8 +13,6 @@ const shortid = require('shortid')
 const moment = require('moment')
 const AccountModel = require('../models/AccountModebl')
 
-
-
 // 记账本的列表
 router.get('/account', async function (req, res, next) {
   // 修正：去掉重复的函数名"async"
@@ -51,9 +49,13 @@ router.post('/account', async (req, res) => {
 router.get('/account/:id', (req, res) => {
   // 获取id
   let id = req.params.id
-  // 删除
-  db.get('accounts').remove({ id }).write()
-  res.render('success', { msg: '删除成功', url: '/account' })
+  AccountModel.deleteOne({ _id: id })
+    .then((data) => {
+      res.render('success', { msg: '删除成功', url: '/account' })
+    })
+    .catch((err) => {
+      res.render('error', { msg: err })
+    })
 })
 
 module.exports = router
