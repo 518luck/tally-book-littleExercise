@@ -31,11 +31,6 @@ router.get('/account', async function (req, res, next) {
   }
 })
 
-// 添加记录
-router.get('/account/create', function (req, res, next) {
-  res.render('create')
-})
-
 //新增记录
 router.post('/account', async (req, res) => {
   const data = await AccountModel.create({
@@ -44,22 +39,60 @@ router.post('/account', async (req, res) => {
     time: moment(req.body.time).toDate(),
   }).catch((err) => {
     // 跳转到错误页面
-    res.render('error', { msg: err })
+    res.json({
+      code: '1002',
+      msg: '创建失败',
+      data: null,
+    })
     return
   })
-  res.render('success', { msg: '新增成功', url: '/account' })
+  res.json({
+    code: '0000',
+    msg: '新增成功',
+    data: data,
+  })
 })
 
 // 删除记录
-router.get('/account/:id', (req, res) => {
+router.delete('/account/:id', (req, res) => {
   // 获取id
   let id = req.params.id
   AccountModel.deleteOne({ _id: id })
     .then((data) => {
-      res.render('success', { msg: '删除成功', url: '/account' })
+      res.json({
+        code: '0000',
+        msg: '删除成功',
+        data: {},
+      })
     })
     .catch((err) => {
-      res.render('error', { msg: err })
+      res.json({
+        code: '1003',
+        msg: '删除失败',
+        data: null,
+      })
+    })
+})
+
+// 获取单个账单信息
+router.get('/account/:id', async (request, response) => {
+  // 获取id参数
+  let { id } = request.params
+  // 查询数据库
+  const data = await AccountModel.findById({ _id: id })
+    .then((data) => {
+      response.json({
+        code: '0000',
+        msg: '获取成功',
+        data: data,
+      })
+    })
+    .catch((err) => {
+      response.json({
+        code: '1004',
+        msg: '获取失败',
+        data: null,
+      })
     })
 })
 
