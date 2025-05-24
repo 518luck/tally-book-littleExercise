@@ -2,7 +2,9 @@ start 设置的为 nodemon 运行, nodemon 全局安装的,并没有安装到依
 
 ## 技术栈
 
-node+express+ejs
+node+express+ejs+mongodb
+
+启动项目的时候优先启动数据库
 
 ## 界面样式
 

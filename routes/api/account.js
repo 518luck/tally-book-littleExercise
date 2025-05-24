@@ -11,11 +11,23 @@ router.get('/account', async function (req, res, next) {
   try {
     // 使用 await 直接获取查询结果（无需再调用 exec().then()）
     const accounts = await AccountModel.find().sort({ time: -1 })
+    // 响应成功的提示
+    res.json({
+      // 响应编号
+      code: '0000',
+      // 响应信息
+      msg: '获取成功',
+      // 响应数据
+      data: accounts,
+    })
     // 直接渲染数据
-    res.render('list', { accounts, moment: moment })
   } catch (err) {
-    console.error(err)
-    res.status(500).send('Server error')
+    //  失败的处理
+    res.json({
+      code: '1001',
+      msg: '获取失败',
+      data: err,
+    })
   }
 })
 
