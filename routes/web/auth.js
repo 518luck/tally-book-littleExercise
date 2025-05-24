@@ -24,4 +24,26 @@ router.post('/reg', (req, res) => {
     })
 })
 
+// 登录页面
+router.get('/login', (req, res) => {
+  res.render('auth/login')
+})
+
+// 登录操作
+router.post('/login', (req, res) => {
+  // 获取用户名和密码
+  let { username, password } = req.body
+  //查询数据库
+  UserModel.findOne({ username: username, password: md5(password) })
+    .then((user) => {
+      // 登录成功
+      if (!user) {
+        return res.render('账号或密码错误')
+      }
+      res.render('success', { msg: '登录成功', url: '/account' })
+    })
+    .catch((err) => {
+      res.status(500).send('登录失败')
+    })
+})
 module.exports = router
