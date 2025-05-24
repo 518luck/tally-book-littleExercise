@@ -96,4 +96,28 @@ router.get('/account/:id', async (request, response) => {
     })
 })
 
+// 更新单个账单信息
+router.patch('/account/:id', async (request, response) => {
+  // 获取id参数
+  let { id } = request.params
+  // 更新数据库
+  const data = await AccountModel.updateOne({ _id: id }, { ...request.body })
+  // 再次查询数据库,获取单挑数据
+  AccountModel.findById({ _id: id }).then((data) => {
+    response
+      .json({
+        code: '0000',
+        msg: '更新成功',
+        data: data,
+      })
+      .catch((err) => {
+        response.json({
+          code: '1005',
+          msg: '更新失败',
+          data: null,
+        })
+      })
+  })
+})
+
 module.exports = router
