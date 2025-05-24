@@ -1,13 +1,41 @@
 var express = require('express')
 var router = express.Router()
+const jwt = require('jsonwebtoken')
 
 // 导入moment
 const moment = require('moment')
 const AccountModel = require('../../models/AccountModebl')
 
+// 声明中间件token验证
+let checkTokenMiddleware = (req, res, next) => {
+  // 获取token
+  let token = req.get('token')
+
+  if (!token) {
+    return res.json({
+      code: '2003',
+      msg: 'token缺失',
+      data: null,
+    })
+  }
+
+  jwt.verify(token, 'itguigu', async (err, data) => {
+    // 检测token是否正确
+    if (err) {
+      return res.json({
+        code: '2004',
+        msg: 'token错误',
+        data: null,
+      })
+    }
+
+    // token校验成功
+    next()
+  })
+}
+
 // 记账本的列表
-router.get('/account', async function (req, res, next) {
-  // 修正：去掉重复的函数名"async"
+router.get('/account', checkTokenMiddleware, async function (req, res, next) {
   try {
     // 使用 await 直接获取查询结果（无需再调用 exec().then()）
     const accounts = await AccountModel.find().sort({ time: -1 })
@@ -20,7 +48,6 @@ router.get('/account', async function (req, res, next) {
       // 响应数据
       data: accounts,
     })
-    // 直接渲染数据
   } catch (err) {
     //  失败的处理
     res.json({
@@ -32,7 +59,7 @@ router.get('/account', async function (req, res, next) {
 })
 
 //新增记录
-router.post('/account', async (req, res) => {
+router.post('/account', checkTokenMiddleware, async (req, res) => {
   const data = await AccountModel.create({
     ...req.body,
     // 时间
@@ -54,7 +81,7 @@ router.post('/account', async (req, res) => {
 })
 
 // 删除记录
-router.delete('/account/:id', (req, res) => {
+router.delete('/account/:id', checkTokenMiddleware, (req, res) => {
   // 获取id
   let id = req.params.id
   AccountModel.deleteOne({ _id: id })
@@ -75,7 +102,7 @@ router.delete('/account/:id', (req, res) => {
 })
 
 // 获取单个账单信息
-router.get('/account/:id', async (request, response) => {
+router.get('/account/:id', checkTokenMiddleware, async (request, response) => {
   // 获取id参数
   let { id } = request.params
   // 查询数据库
@@ -97,27 +124,31 @@ router.get('/account/:id', async (request, response) => {
 })
 
 // 更新单个账单信息
-router.patch('/account/:id', async (request, response) => {
-  // 获取id参数
-  let { id } = request.params
-  // 更新数据库
-  const data = await AccountModel.updateOne({ _id: id }, { ...request.body })
-  // 再次查询数据库,获取单挑数据
-  AccountModel.findById({ _id: id }).then((data) => {
-    response
-      .json({
-        code: '0000',
-        msg: '更新成功',
-        data: data,
-      })
-      .catch(() => {
-        response.json({
-          code: '1005',
-          msg: '更新失败',
-          data: null,
+router.patch(
+  '/account/:id',
+  checkTokenMiddleware,
+  async (request, response) => {
+    // 获取id参数
+    let { id } = request.params
+    // 更新数据库
+    const data = await AccountModel.updateOne({ _id: id }, { ...request.body })
+    // 再次查询数据库,获取单挑数据
+    AccountModel.findById({ _id: id }).then((data) => {
+      response
+        .json({
+          code: '0000',
+          msg: '更新成功',
+          data: data,
         })
-      })
-  })
-})
+        .catch(() => {
+          response.json({
+            code: '1005',
+            msg: '更新失败',
+            data: null,
+          })
+        })
+    })
+  }
+)
 
 module.exports = router

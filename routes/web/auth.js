@@ -6,8 +6,6 @@ const md5 = require('md5')
 
 // 注册
 router.get('/reg', (req, res) => {
-  // 表单验证
-  // 插入数据库
   // 响应HTML 内容
   res.render('auth/reg')
 })
