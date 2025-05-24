@@ -110,7 +110,7 @@ router.patch('/account/:id', async (request, response) => {
         msg: '更新成功',
         data: data,
       })
-      .catch((err) => {
+      .catch(() => {
         response.json({
           code: '1005',
           msg: '更新失败',
