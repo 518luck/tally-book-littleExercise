@@ -1,38 +1,9 @@
 var express = require('express')
 var router = express.Router()
-const jwt = require('jsonwebtoken')
-
 // 导入moment
 const moment = require('moment')
 const AccountModel = require('../../models/AccountModebl')
-
-// 声明中间件token验证
-let checkTokenMiddleware = (req, res, next) => {
-  // 获取token
-  let token = req.get('token')
-
-  if (!token) {
-    return res.json({
-      code: '2003',
-      msg: 'token缺失',
-      data: null,
-    })
-  }
-
-  jwt.verify(token, 'itguigu', async (err, data) => {
-    // 检测token是否正确
-    if (err) {
-      return res.json({
-        code: '2004',
-        msg: 'token错误',
-        data: null,
-      })
-    }
-
-    // token校验成功
-    next()
-  })
-}
+const checkTokenMiddleware = require('../../middlewares/checkTokenMiddleware')
 
 // 记账本的列表
 router.get('/account', checkTokenMiddleware, async function (req, res, next) {
