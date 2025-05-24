@@ -5,8 +5,11 @@ var router = express.Router()
 const moment = require('moment')
 const AccountModel = require('../../models/AccountModebl')
 
+// 导入中间件检测登录
+const checkLoginMiddleware = require('../../middlewares/checkLoginMiddleware')
+
 // 记账本的列表
-router.get('/account', async function (req, res, next) {
+router.get('/account', checkLoginMiddleware, async function (req, res, next) {
   // 修正：去掉重复的函数名"async"
   try {
     // 使用 await 直接获取查询结果（无需再调用 exec().then()）
@@ -20,12 +23,12 @@ router.get('/account', async function (req, res, next) {
 })
 
 // 添加记录
-router.get('/account/create', function (req, res, next) {
+router.get('/account/create', checkLoginMiddleware, function (req, res, next) {
   res.render('create')
 })
 
 //新增记录
-router.post('/account', async (req, res) => {
+router.post('/account', checkLoginMiddleware, async (req, res) => {
   const data = await AccountModel.create({
     ...req.body,
     // 时间
@@ -38,7 +41,8 @@ router.post('/account', async (req, res) => {
   res.render('success', { msg: '新增成功', url: '/account' })
 })
 
-router.get('/account/:id', (req, res) => {
+// 删除记录
+router.get('/account/:id', checkLoginMiddleware, (req, res) => {
   // 获取id
   let id = req.params.id
   AccountModel.deleteOne({ _id: id })
