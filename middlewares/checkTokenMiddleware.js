@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { secret } = require('../config/config')
 // 声明中间件token验证
 module.exports = (req, res, next) => {
   // 获取token
@@ -12,7 +13,7 @@ module.exports = (req, res, next) => {
     })
   }
 
-  jwt.verify(token, 'itguigu', async (err, data) => {
+  jwt.verify(token, secret, async (err, data) => {
     // 检测token是否正确
     if (err) {
       return res.json({
@@ -22,6 +23,8 @@ module.exports = (req, res, next) => {
       })
     }
 
+    // 保存用户信息
+    req.user = data
     // token校验成功
     next()
   })
